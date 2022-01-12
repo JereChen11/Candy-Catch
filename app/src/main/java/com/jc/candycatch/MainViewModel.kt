@@ -14,10 +14,10 @@ class MainViewModel : ViewModel() {
     fun generatePointViewOnTime() {
 
         viewModelScope.launch {
-            for (i in 0..5) {
+            for (i in 0..50) {
                 Log.e(TAG, "generatePointViewOnTime: i = $i")
                 pointViewLiveData.value = i
-                delay(1000)
+                delay(500)
             }
         }
 

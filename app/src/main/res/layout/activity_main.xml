@@ -1,30 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/pointView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/shape_circle"
+        android:id="@+id/leftTimeTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
         android:gravity="center"
-        android:text="50g"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="剩余时间 00:15"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+         />
 
-    <com.jc.candycatch.PointView
-        android:id="@+id/pointView2"
-        android:background="@color/green"
-        android:visibility="gone"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="50dp"/>
+    <TextView
+        android:id="@+id/catchNumberTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="135dp"
+        android:gravity="center"
+        android:text="10"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--    <com.jc.candycatch.PointView-->
+    <!--        android:id="@+id/pointView2"-->
+    <!--        android:layout_width="50dp"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:layout_marginStart="50dp"-->
+    <!--        android:background="@color/green"-->
+    <!--        android:visibility="gone"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/dynamicContainerLl"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:orientation="vertical"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+</FrameLayout>

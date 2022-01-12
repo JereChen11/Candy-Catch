@@ -25,3 +25,11 @@ val Float.sp2px: Float
             Resources.getSystem().displayMetrics
         )
     }
+
+fun getScreenWidth(): Int {
+    return Resources.getSystem().displayMetrics.widthPixels
+}
+
+fun getScreenHeight(): Int {
+    return Resources.getSystem().displayMetrics.heightPixels
+}

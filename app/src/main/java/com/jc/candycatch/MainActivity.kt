@@ -1,124 +1,76 @@
 package com.jc.candycatch
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
-import android.view.animation.Animation
+import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.marginTop
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.jc.candycatch.databinding.ActivityMainBinding
-import com.jc.candycatch.utils.px2dp
+import com.jc.candycatch.utils.getScreenHeight
+import com.jc.candycatch.utils.getScreenWidth
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-    private val pointViewMap = mutableMapOf<Int, PointView>()
+    private var catchNumber = 0;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        startMoving(binding.pointView)
-
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
         viewModel.pointViewLiveData.observe(this, {
-            Log.e(TAG, "onCreate: it = $it")
+            val centerX = (0..(getScreenWidth() - 120)).random()
+            TextView(this).apply {
+                layoutParams = FrameLayout.LayoutParams(120, 120).apply {
+                    setMargins(centerX, -120, 0, 0)
+                }
+                background = ContextCompat.getDrawable(this@MainActivity, generateRandomCandy())
+                binding.root.addView(this)
+                startMoving(this)
 
-            //todo generate a View
-            val centerX = (100..(getScreenWidth() - 100)).random()
-            Log.e(TAG, "onCreate: centerX = $centerX, px2dp = ${centerX.toFloat().px2dp}")
-            val newPv = PointView(this).apply {
-                id = it
-                layoutParams = ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
-                confirmPosition(centerX.toFloat())
+                setOnClickListener {
+                    this.visibility = View.GONE
+                    Log.e(TAG, "onCreate: tag = ${it.tag}, id = ${it.id}")
+                    catchNumber++
+                    binding.catchNumberTv.text = catchNumber.toString()
+                }
             }
-            Log.e(TAG, "onCreate: newPv.TAG =  ${newPv.TAG}, newPv.id = ${newPv.id}", )
-            pointViewMap[it] = newPv
-            binding.root.addView(newPv)
-            startMoving(newPv)
         })
 
         viewModel.generatePointViewOnTime()
+    }
 
-
-
-//        startMoving(binding.pointView2)
-
-        Log.e(TAG, "onCreate: getScreenWidth() = " + getScreenWidth())
-
-
-
-
-
-
-
-
-        //todo startMoving
-
-//        binding.pointView.apply {
-//            animate().apply {
-//                interpolator = AccelerateInterpolator()
-//                duration = 10000
-//                translationY(10000f)
-//                start()
-//            }
-//
-//            setOnClickListener {
-//                clearAnimation()
-//            }
-//        }
-
+    private fun generateRandomCandy(): Int {
+        return when((0..9).random()) {
+            0 -> R.drawable.svg_candy1
+            1 -> R.drawable.svg_candy2
+            2 -> R.drawable.svg_candy3
+            3 -> R.drawable.svg_candy4
+            4 -> R.drawable.svg_candy5
+            5 -> R.drawable.svg_candy6
+            6 -> R.drawable.svg_candy7
+            7 -> R.drawable.svg_candy8
+            8 -> R.drawable.svg_candy9
+            else -> R.drawable.svg_candy10
+        }
     }
 
     private fun startMoving(view: View) {
         view.apply {
             animate().apply {
                 interpolator = AccelerateInterpolator()
-                duration = 10000
-                translationY(10000f)
+                duration = 3000
+                translationY(getScreenHeight().toFloat() + 200)
                 start()
             }
-
-//            animation?.setAnimationListener(object: Animation.AnimationListener {
-//                override fun onAnimationStart(p0: Animation?) {
-//                }
-//
-//                override fun onAnimationEnd(p0: Animation?) {
-//
-//                }
-//
-//                override fun onAnimationRepeat(p0: Animation?) {
-//                }
-//
-//            })
-
-//            setOnClickListener {
-//                Log.e(TAG, "startMoving: click ${view.id}")
-//                pointViewMap[it.id]?.apply {
-//                    visibility = View.GONE
-//                    animation?.cancel()
-//                    clearAnimation()
-//                }
-
-//                it.clearAnimation ()
-//            }
-
         }
     }
 
-    fun getScreenWidth(): Int {
-        return Resources.getSystem().displayMetrics.widthPixels
-    }
 
-    fun getScreenHeight(): Int {
-        return Resources.getSystem().displayMetrics.heightPixels
-    }
 }
