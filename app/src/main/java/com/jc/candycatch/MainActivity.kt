@@ -1,6 +1,7 @@
 package com.jc.candycatch
 
-import android.os.Bundle
+import android.content.Context
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -15,7 +16,7 @@ import com.jc.candycatch.utils.getScreenWidth
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
-    private var catchNumber = 0;
+    private var catchNumber = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,8 @@ class MainActivity : AppCompatActivity() {
                     Log.e(TAG, "onCreate: tag = ${it.tag}, id = ${it.id}")
                     catchNumber++
                     binding.catchNumberTv.text = catchNumber.toString()
+                    //todo need implement vibrator effect
+                    doVibratorEffect()
                 }
             }
         })
@@ -47,7 +50,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun generateRandomCandy(): Int {
-        return when((0..9).random()) {
+        return when ((0..9).random()) {
             0 -> R.drawable.svg_candy1
             1 -> R.drawable.svg_candy2
             2 -> R.drawable.svg_candy3
@@ -69,6 +72,22 @@ class MainActivity : AppCompatActivity() {
                 translationY(getScreenHeight().toFloat() + 200)
                 start()
             }
+        }
+    }
+
+    private fun doVibratorEffect() {
+        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val vibratorManager =
+                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(30)
         }
     }
 
