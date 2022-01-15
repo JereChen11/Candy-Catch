@@ -13,15 +13,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.jc.candycatch.databinding.ActivityMainBinding
 import com.jc.candycatch.utils.getScreenHeight
 import com.jc.candycatch.utils.getScreenWidth
+import com.jc.candycatch.view.CountDownDialog
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "MainActivity"
     private var catchNumber = 0
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        CountDownDialog.newInstance().show(supportFragmentManager.beginTransaction(), "CountDownDialog")
 
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
 
