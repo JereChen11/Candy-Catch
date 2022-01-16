@@ -1,33 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
-<!--    <alpha-->
-<!--        android:duration="3000"-->
-<!--        android:fillAfter="true"-->
-<!--        android:fromAlpha="0.0"-->
-<!--        android:repeatCount="-1"-->
-<!--        android:repeatMode="reverse"-->
-<!--        android:toAlpha="1.0" />-->
+    <alpha
+        android:duration="3000"
+        android:fromAlpha="0.0"
+        android:repeatCount="-1"
+        android:repeatMode="restart"
+        android:toAlpha="1.0" />
 
     <translate
-        android:duration="2000"
-        android:fillAfter="true"
-        android:fromYDelta="0"
+        android:duration="3000"
+        android:fromYDelta="0%"
         android:interpolator="@android:anim/accelerate_interpolator"
         android:repeatCount="-1"
         android:repeatMode="restart"
-        android:toYDelta="-200" />
+        android:toYDelta="-30%p" />
 
     <scale
-        android:duration="2000"
-        android:fillAfter="true"
+        android:duration="3000"
         android:fromXScale="0"
         android:fromYScale="0"
         android:pivotX="50%"
         android:pivotY="50%"
         android:repeatCount="-1"
         android:repeatMode="restart"
-        android:toXScale="2"
-        android:toYScale="2" />
+        android:toXScale="1"
+        android:toYScale="1" />
 
 </set>

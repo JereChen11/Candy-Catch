@@ -45,6 +45,7 @@ class CountDownDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        handClickAnimation()
         binding?.apply {
             Timer().apply {
                 scheduleAtFixedRate(timerTask {
@@ -59,6 +60,12 @@ class CountDownDialog : DialogFragment() {
                     countDownNumber--
                 }, 1000, 1000)
             }
+
+            startTv.setOnClickListener {
+                dialog?.dismiss()
+            }
+
+
         }
         handClickAnimation()
     }

@@ -22,6 +22,7 @@
         android:id="@+id/startTv"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
+        android:layout_marginTop="100dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/shape_rec_color_main_radius_30"
         android:gravity="center_vertical"
@@ -33,7 +34,9 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1" />
 
     <TextView
         android:id="@+id/handClickTv"
@@ -64,8 +67,8 @@
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/svg_candy8"
         android:text="+1"
-        android:textSize="20sp"
         android:textColor="@color/light_gray"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@id/startTv"
         app:layout_constraintEnd_toEndOf="@id/startTv"
         app:layout_constraintHorizontal_bias="0.95"
