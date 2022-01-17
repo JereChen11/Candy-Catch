@@ -31,10 +31,10 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.pointViewLiveData.observe(this, {
-            val centerX = (0..(getScreenWidth() - 140)).random()
+            val leftMargin = (0..(getScreenWidth() - 140)).random()
             TextView(this).apply {
                 layoutParams = FrameLayout.LayoutParams(140, 140).apply {
-                    setMargins(centerX, -140, 0, 0)
+                    setMargins(leftMargin, -140, 0, 0)
                 }
                 background = ContextCompat.getDrawable(this@MainActivity, generateRandomCandy())
                 binding.root.addView(this)
@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
     }
 
     override fun onDismiss() {
+
         viewModel.generatePointViewOnTime()
     }
 

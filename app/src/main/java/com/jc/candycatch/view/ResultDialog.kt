@@ -50,11 +50,11 @@ class ResultDialog : DialogFragment() {
             }
         }
 
-        doAnimation(view)
+        showAnimation(view)
 
     }
 
-    private fun doAnimation(view: View) {
+    private fun showAnimation(view: View) {
         view.scaleX = 0F
         view.scaleY = 0F
 

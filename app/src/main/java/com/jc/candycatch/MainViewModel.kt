@@ -13,7 +13,6 @@ class MainViewModel : ViewModel() {
     val countDownTimeLiveData = MutableLiveData<Int>()
 
     fun generatePointViewOnTime() {
-
         viewModelScope.launch {
             for (i in 1..60) {
                 Log.e(TAG, "generatePointViewOnTime: i = $i")
