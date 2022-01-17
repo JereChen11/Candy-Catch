@@ -1,13 +1,11 @@
 package com.jc.candycatch.view
 
-import android.animation.ObjectAnimator
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.DialogFragment
 import com.jc.candycatch.R
@@ -17,7 +15,7 @@ import kotlin.concurrent.timerTask
 
 class CountDownDialog : DialogFragment() {
     private var binding: FragmentDialogCountDownBinding? = null
-    private var countDownNumber = 3
+    private var countDownNumber = 4
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,7 +27,7 @@ class CountDownDialog : DialogFragment() {
         dialog?.window?.setGravity(Gravity.BOTTOM)
         dialog?.window?.setLayout(
             ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
+            ViewGroup.LayoutParams.MATCH_PARENT
         )
     }
 
@@ -47,24 +45,29 @@ class CountDownDialog : DialogFragment() {
 
         handClickAnimation()
         binding?.apply {
-            Timer().apply {
-                scheduleAtFixedRate(timerTask {
-                    if (countDownNumber <= 1) {
-                        cancel()
-                    }
-                    Log.e("jctest", "onViewCreated: countDownNumber = $countDownNumber")
-
-                    countDownTv.post {
-                        countDownTv.text = countDownNumber.toString()
-                    }
-                    countDownNumber--
-                }, 1000, 1000)
-            }
-
             startTv.setOnClickListener {
-                dialog?.dismiss()
+                startContainerCl.visibility = View.GONE
+                val countDownAnimation =
+                    AnimationUtils.loadAnimation(context, R.anim.count_down_anim)
+                Timer().apply {
+                    scheduleAtFixedRate(timerTask {
+                        if (countDownNumber <= 1) {
+                            cancel()
+                            dialog?.dismiss()
+                            dialogDismissListener?.onDismiss()
+                        } else {
+                            countDownTv.apply {
+                                post {
+                                    visibility = View.VISIBLE
+                                    text = countDownNumber.toString()
+                                    startAnimation(countDownAnimation)
+                                }
+                            }
+                            countDownNumber--
+                        }
+                    }, 0, 1000)
+                }
             }
-
 
         }
         handClickAnimation()
@@ -86,17 +89,6 @@ class CountDownDialog : DialogFragment() {
                 startAnimation(animation)
             }
         }
-
-
-
-
-        val oa = ObjectAnimator.ofFloat(binding?.handClickTv, "translationX", -100f).apply {
-            duration = 1000
-            repeatCount = Animation.INFINITE
-//            repeatMode = Animation.RESTART
-//            repeatMode = 10
-        }
-
     }
 
     override fun onDestroy() {
@@ -104,12 +96,21 @@ class CountDownDialog : DialogFragment() {
         binding = null
     }
 
+    override fun onCancel(dialog: DialogInterface) {
+        super.onCancel(dialog)
+        activity?.finish()
+    }
+
+    interface DialogDismissListener {
+        fun onDismiss()
+    }
+
     companion object {
+        var dialogDismissListener: DialogDismissListener? = null
 
-        fun newInstance(): CountDownDialog {
-            return CountDownDialog().apply {
-
-            }
+        fun newInstance(listener: DialogDismissListener): CountDownDialog {
+            this.dialogDismissListener = listener
+            return CountDownDialog()
         }
     }
 

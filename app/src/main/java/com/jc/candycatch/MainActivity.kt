@@ -14,26 +14,27 @@ import com.jc.candycatch.databinding.ActivityMainBinding
 import com.jc.candycatch.utils.getScreenHeight
 import com.jc.candycatch.utils.getScreenWidth
 import com.jc.candycatch.view.CountDownDialog
+import com.jc.candycatch.view.ResultDialog
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
+    ResultDialog.PlayAgainListener {
+
     private val TAG = "MainActivity"
     private var catchNumber = 0
     private lateinit var binding: ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        CountDownDialog.newInstance().show(supportFragmentManager.beginTransaction(), "CountDownDialog")
-
-        val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.pointViewLiveData.observe(this, {
-            val centerX = (0..(getScreenWidth() - 120)).random()
+            val centerX = (0..(getScreenWidth() - 140)).random()
             TextView(this).apply {
-                layoutParams = FrameLayout.LayoutParams(120, 120).apply {
-                    setMargins(centerX, -120, 0, 0)
+                layoutParams = FrameLayout.LayoutParams(140, 140).apply {
+                    setMargins(centerX, -140, 0, 0)
                 }
                 background = ContextCompat.getDrawable(this@MainActivity, generateRandomCandy())
                 binding.root.addView(this)
@@ -43,14 +44,27 @@ class MainActivity : AppCompatActivity() {
                     this.visibility = View.GONE
                     Log.e(TAG, "onCreate: tag = ${it.tag}, id = ${it.id}")
                     catchNumber++
-                    binding.catchNumberTv.text = catchNumber.toString()
-                    //todo need implement vibrator effect
+                    binding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
                     doVibratorEffect()
                 }
             }
         })
+        viewModel.countDownTimeLiveData.observe(this, {
+            val leftTimeCount = 15 - it
+            if (it >= 6) {
+                binding.leftTimeTv.text = getString(R.string.left_time_single, leftTimeCount)
+            } else {
+                binding.leftTimeTv.text = getString(R.string.left_time_double, leftTimeCount)
+            }
+            if (leftTimeCount == 0) {
+                Handler(Looper.getMainLooper()).postDelayed({
+                    ResultDialog.newInstance(this, catchNumber++)
+                        .show(supportFragmentManager.beginTransaction(), "ResultDialog")
+                }, 3000)
+            }
+        })
 
-        viewModel.generatePointViewOnTime()
+        showCountDownDialog()
     }
 
     private fun generateRandomCandy(): Int {
@@ -95,5 +109,22 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onDismiss() {
+        viewModel.generatePointViewOnTime()
+    }
+
+    override fun playAgain() {
+        catchNumber = 0
+        binding.apply {
+            leftTimeTv.text = getString(R.string.left_time_double, 15)
+            binding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
+        }
+        showCountDownDialog()
+    }
+
+    private fun showCountDownDialog() {
+        CountDownDialog.newInstance(this)
+            .show(supportFragmentManager.beginTransaction(), "CountDownDialog")
+    }
 
 }

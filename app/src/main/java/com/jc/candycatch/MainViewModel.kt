@@ -10,14 +10,18 @@ import kotlinx.coroutines.launch
 class MainViewModel : ViewModel() {
     val TAG = "MainViewModel"
     val pointViewLiveData = MutableLiveData<Int>()
+    val countDownTimeLiveData = MutableLiveData<Int>()
 
     fun generatePointViewOnTime() {
 
         viewModelScope.launch {
-            for (i in 0..50) {
+            for (i in 1..60) {
                 Log.e(TAG, "generatePointViewOnTime: i = $i")
                 pointViewLiveData.value = i
-                delay(500)
+                if (i % 4 == 0) {
+                    countDownTimeLiveData.postValue(i / 4)
+                }
+                delay(250)
             }
         }
 

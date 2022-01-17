@@ -18,6 +18,6 @@
         android:pivotY="50%"
         android:repeatCount="-1"
         android:repeatMode="restart"
-        android:toXScale="2"
-        android:toYScale="2" />
+        android:toXScale="1.5"
+        android:toYScale="1.5" />
 </set>

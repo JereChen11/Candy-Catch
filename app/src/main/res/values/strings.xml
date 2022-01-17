@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">CandyCatch</string>
+    <string name="left_time_double">剩余时间 00:%d</string>
+    <string name="left_time_single">剩余时间 00:0%d</string>
+    <string name="catch_number">%d 个</string>
+    <string name="congratulation">恭喜获得</string>
+    <string name="play_again">再来一次</string>
+    <string name="add_sign">+</string>
+    <string name="start_immediately">立即开启</string>
 </resources>
