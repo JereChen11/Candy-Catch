@@ -6,7 +6,7 @@
 
 | 开始引导页面 | 糖果收集页面 | 收集结束页面 |
 | :---: | :---: | :---: |
-| <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8d81bcc344014fadbe8491724bef5500~tplv-k3u1fbpfcp-watermark.image"> | <img src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d59cffee7fe046d7b78ea00c0195bb11~tplv-k3u1fbpfcp-watermark.image"> | <img src="https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/508cc9c80392401eb60be7ffe927e53b~tplv-k3u1fbpfcp-watermark.image"> |
+| <img src="https://github.com/JereChen11/Candy-Catch/raw/main/image/start.gif"> | <img src="https://github.com/JereChen11/Candy-Catch/raw/main/image/center.gif"> | <img src="https://github.com/JereChen11/Candy-Catch/raw/main/image/end.gif"> |
 
 
 # 实现细节
