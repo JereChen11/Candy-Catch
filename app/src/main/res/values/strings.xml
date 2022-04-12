@@ -5,6 +5,7 @@
     <string name="catch_number">%d 个</string>
     <string name="congratulation">恭喜获得</string>
     <string name="play_again">再来一次</string>
+    <string name="adjust_factor">难度调整</string>
     <string name="add_sign">+</string>
     <string name="start_immediately">立即开启</string>
     <string name="count_down_dialog_title">糖果雨来啦\n愿你的生活多点甜~</string>

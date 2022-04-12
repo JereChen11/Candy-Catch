@@ -1,8 +1,11 @@
 package com.jc.candycatch
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.os.*
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.widget.FrameLayout
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
     private var catchNumber = 0
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: MainViewModel
+    private val movingDuration = 3000L
+    private val viewMap: MutableMap<Int, TextView> = HashMap()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,9 +35,11 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        viewModel.pointViewLiveData.observe(this, {
+        viewModel.pointViewLd.observe(this, {
             val leftMargin = (0..(getScreenWidth() - 140)).random()
             TextView(this).apply {
+                Log.e(TAG, "onCreate: new TextView, set id  = $it")
+                id = it
                 layoutParams = FrameLayout.LayoutParams(140, 140).apply {
                     setMargins(leftMargin, -140, 0, 0)
                 }
@@ -40,29 +47,45 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
                 binding.root.addView(this)
                 startMoving(this)
 
-                setOnClickListener {
-                    this.visibility = View.GONE
-                    Log.e(TAG, "onCreate: tag = ${it.tag}, id = ${it.id}")
-                    catchNumber++
-                    binding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
-                    doVibratorEffect()
-                }
+                setOnTouchListener(object : View.OnTouchListener {
+                    override fun onTouch(view: View?, motionEvent: MotionEvent?): Boolean {
+                        Log.e(TAG, "onTouch: view.id = ${view?.id}", )
+
+                        if (motionEvent?.action == MotionEvent.ACTION_DOWN) {
+                            view?.visibility = View.GONE
+                            catchNumber++
+                            binding.catchNumberTv.text =
+                                getString(R.string.catch_number, catchNumber)
+                            doVibratorEffect()
+
+                            view?.id?.let { idKey ->
+                                viewMap.remove(idKey)
+                            }
+
+                            return true
+                        }
+
+                        return false
+                    }
+                })
+
+                viewMap[id] = this
             }
         })
-        viewModel.countDownTimeLiveData.observe(this, {
-            val leftTimeCount = 15 - it
-            if (it >= 6) {
-                binding.leftTimeTv.text = getString(R.string.left_time_single, leftTimeCount)
-            } else {
-                binding.leftTimeTv.text = getString(R.string.left_time_double, leftTimeCount)
-            }
-            if (leftTimeCount == 0) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    ResultDialog.newInstance(this, catchNumber++)
-                        .show(supportFragmentManager.beginTransaction(), "ResultDialog")
-                }, 3000)
-            }
-        })
+//        viewModel.countDownTimeLiveData.observe(this, {
+//            val leftTimeCount = 15 - it
+//            if (it >= 6) {
+//                binding.leftTimeTv.text = getString(R.string.left_time_single, leftTimeCount)
+//            } else {
+//                binding.leftTimeTv.text = getString(R.string.left_time_double, leftTimeCount)
+//            }
+//            if (leftTimeCount == 0) {
+//                Handler(Looper.getMainLooper()).postDelayed({
+//                    ResultDialog.newInstance(this, catchNumber++)
+//                        .show(supportFragmentManager.beginTransaction(), "ResultDialog")
+//                }, 3000)
+//            }
+//        })
 
         showCountDownDialog()
     }
@@ -82,15 +105,36 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
         }
     }
 
-    private fun startMoving(view: View) {
-        view.apply {
-            animate().apply {
-                interpolator = AccelerateInterpolator()
-                duration = 3000
-                translationY(getScreenHeight().toFloat() + 200)
-                start()
-            }
+    private fun startMoving(tv: TextView) {
+        ObjectAnimator.ofFloat(tv, "y", getScreenHeight().toFloat() + 200).apply {
+            interpolator = AccelerateInterpolator()
+            duration = movingDuration
+            addListener(object : Animator.AnimatorListener {
+                override fun onAnimationStart(p0: Animator?) {
+
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    viewMap.remove(tv.id)
+                    if (viewMap.isEmpty()) {
+                        ResultDialog.newInstance(this@MainActivity, catchNumber++)
+                            .show(supportFragmentManager.beginTransaction(), "ResultDialog")
+                    }
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+
+                }
+
+                override fun onAnimationRepeat(p0: Animator?) {
+
+                }
+
+            })
+            start()
+
         }
+
     }
 
     private fun doVibratorEffect() {
@@ -103,9 +147,9 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(30, VibrationEffect.DEFAULT_AMPLITUDE))
+            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
         } else {
-            vibrator.vibrate(30)
+            vibrator.vibrate(50)
         }
     }
 
@@ -117,7 +161,7 @@ class MainActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
     override fun playAgain() {
         catchNumber = 0
         binding.apply {
-            leftTimeTv.text = getString(R.string.left_time_double, 15)
+//            leftTimeTv.text = getString(R.string.left_time_double, 15)
             binding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
         }
         showCountDownDialog()
