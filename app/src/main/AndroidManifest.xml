@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CandyCatch">
         <activity
+            android:name=".TestActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.CandyCatch.Splash">
