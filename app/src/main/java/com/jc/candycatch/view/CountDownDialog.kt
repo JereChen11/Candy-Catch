@@ -1,7 +1,6 @@
 package com.jc.candycatch.view
 
 import android.content.DialogInterface
-import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.DialogFragment
 import com.jc.candycatch.R
-import com.jc.candycatch.TestActivity
 import com.jc.candycatch.databinding.FragmentDialogCountDownBinding
 import java.util.*
 import kotlin.concurrent.timerTask
@@ -69,9 +67,6 @@ class CountDownDialog : DialogFragment() {
                         }
                     }, 0, 1000)
                 }
-            }
-            testBtn.setOnClickListener {
-                startActivity(Intent(activity, TestActivity::class.java))
             }
 
         }

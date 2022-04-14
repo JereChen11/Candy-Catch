@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TestActivity">
+    tools:context=".advanced.AdvancedActivity">
 
     <ImageView
         android:id="@+id/issueIv"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:src="@drawable/svg_candy8"
         app:layout_constraintBottom_toBottomOf="parent"

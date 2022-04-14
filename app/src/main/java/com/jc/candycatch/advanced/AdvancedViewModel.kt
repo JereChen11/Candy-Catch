@@ -1,4 +1,4 @@
-package com.jc.candycatch
+package com.jc.candycatch.advanced
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,11 +9,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class MainViewModel : ViewModel() {
-    val TAG = "MainViewModel"
+class AdvancedViewModel : ViewModel() {
+    val TAG = "AdvancedViewModel"
     private val _pointViewMld = MutableLiveData<Int>()
     val pointViewLd: LiveData<Int> = _pointViewMld
-    val countDownTimeLiveData = MutableLiveData<Int>()
 
     private val delayTime = 18000L
 
@@ -22,14 +21,6 @@ class MainViewModel : ViewModel() {
             for (i in 41..100) {
                 Log.e(TAG, "generatePointViewOnTime: i = $i")
                 _pointViewMld.postValue(i)
-//                if (i % 4 == 0) {
-//                    countDownTimeLiveData.postValue(i / 4)
-//                }
-                //1s 四个点
-                //todo add 自定义加速度生成。那我控制delay的变量不就可以了。
-                //i 越大，delay 越小。
-//                delay(250)
-                //todo 难度的控制就是控制这个变量
                 delay(delayTime / i)
             }
         }
