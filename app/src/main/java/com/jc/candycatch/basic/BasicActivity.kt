@@ -31,6 +31,7 @@ class BasicActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener
     private val viewMap: MutableMap<Int, TextView> = HashMap()
     private var catchNumber = 0
     private val TAG = "BasicActivity"
+    private var isShowResultDialog = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,10 +93,11 @@ class BasicActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener
                 override fun onAnimationEnd(p0: Animator?) {
                     viewMap.remove(tv.id)
                     Log.e(TAG, "onAnimationEnd: viewMap.size = ${viewMap.size}")
-                    if (viewMap.isEmpty()) {
+                    if (viewMap.isEmpty() && !isShowResultDialog) {
                         Log.e(TAG, "onAnimationEnd: viewMap.isEmpty", )
                         ResultDialog.newInstance(this@BasicActivity, catchNumber++)
                             .show(supportFragmentManager.beginTransaction(), "ResultDialog")
+                        isShowResultDialog = true
                     }
                 }
 
@@ -109,40 +111,24 @@ class BasicActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener
 
             })
             start()
-
         }
 
     }
 
-//    private fun doVibratorEffect() {
-//        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-//            val vibratorManager =
-//                getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-//            vibratorManager.defaultVibrator
-//        } else {
-//            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-//        } else {
-//            vibrator.vibrate(50)
-//        }
-//    }
-
     override fun onDismiss() {
-
         viewModel.generatePointViewOnTime()
     }
 
     override fun playAgain() {
         viewMap.clear()
         catchNumber = 0
-        binding.apply {
-//            leftTimeTv.text = getString(R.string.left_time_double, 15)
-            binding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
-        }
-        showCountDownDialog()
+        isShowResultDialog = false
+//        showCountDownDialog()
+        viewModel.generatePointViewOnTime()
+    }
+
+    override fun backHomePage() {
+        finish()
     }
 
     private fun showCountDownDialog() {

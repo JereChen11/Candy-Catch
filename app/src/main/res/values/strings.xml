@@ -5,6 +5,7 @@
     <string name="catch_number">%d 个</string>
     <string name="congratulation">恭喜获得</string>
     <string name="play_again">再来一次</string>
+    <string name="back_home_page">返回首页</string>
     <string name="adjust_factor">难度调整</string>
     <string name="add_sign">+</string>
     <string name="start_immediately">立即开启</string>

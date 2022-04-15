@@ -45,8 +45,12 @@ class ResultDialog : DialogFragment() {
         binding?.apply {
             numberTv.text = catchNumber.toString()
             playAgainTv.setOnClickListener {
-                dialog?.dismiss()
                 playAgainListener?.playAgain()
+                dismiss()
+            }
+            backHomePageTv.setOnClickListener {
+                playAgainListener?.backHomePage()
+                dismiss()
             }
         }
 
@@ -97,6 +101,8 @@ class ResultDialog : DialogFragment() {
 
     interface PlayAgainListener {
         fun playAgain()
+
+        fun backHomePage()
     }
 
     companion object {
