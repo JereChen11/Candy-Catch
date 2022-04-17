@@ -36,7 +36,7 @@ class BasicActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityBasicBinding.inflate(layoutInflater)
+        binding = ActivityBasicBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         viewModel = ViewModelProvider(this)[BasicViewModel::class.java]
