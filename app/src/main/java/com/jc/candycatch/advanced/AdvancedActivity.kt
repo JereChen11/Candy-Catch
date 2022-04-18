@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
@@ -122,7 +121,9 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
 
                 override fun onAnimationEnd(p0: Animator?) {
                     viewMap.remove(tv.id)
-                    if (viewMap.isEmpty() && !isShowResultDialog) {
+                    if (viewMap.isEmpty() && !isShowResultDialog
+                        && !supportFragmentManager.isDestroyed
+                    ) {
                         ResultDialog.newInstance(this@AdvancedActivity, catchNumber++)
                             .show(supportFragmentManager.beginTransaction(), "ResultDialog")
                         isShowResultDialog = true

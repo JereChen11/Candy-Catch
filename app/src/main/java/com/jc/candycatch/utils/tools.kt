@@ -6,7 +6,6 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
-import android.util.Log
 import com.jc.candycatch.R
 
 fun getScreenWidth(): Int {
@@ -33,20 +32,17 @@ fun generateRandomCandy(): Int {
 }
 
 fun Context.doVibratorEffect() {
+    val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+        vibratorManager.defaultVibrator
+    } else {
+        getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+    }
 
-    Log.e("jctest", "doVibratorEffect: javaClass.name = ${javaClass.name}")
-    Log.e("jctest", "doVibratorEffect: javaClass.canonicalName = ${javaClass.canonicalName}")
-        val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
-            vibratorManager.defaultVibrator
-        } else {
-            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
-        } else {
-            vibrator.vibrate(50)
-        }
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        vibrator.vibrate(VibrationEffect.createOneShot(50, VibrationEffect.DEFAULT_AMPLITUDE))
+    } else {
+        vibrator.vibrate(50)
+    }
 
 }

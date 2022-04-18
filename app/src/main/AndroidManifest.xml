@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CandyCatch">
         <activity
+            android:name=".difficult.DifficultActivity"
+            android:exported="false" />
+        <activity
             android:name=".basic.BasicActivity"
             android:exported="false" />
         <activity

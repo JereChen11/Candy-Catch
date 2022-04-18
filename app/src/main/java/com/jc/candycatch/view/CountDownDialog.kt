@@ -16,6 +16,7 @@ import kotlin.concurrent.timerTask
 class CountDownDialog : DialogFragment() {
     private var binding: FragmentDialogCountDownBinding? = null
     private var countDownNumber = 4
+    private val timer by lazy { Timer() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,26 +50,23 @@ class CountDownDialog : DialogFragment() {
                 startContainerCl.visibility = View.GONE
                 val countDownAnimation =
                     AnimationUtils.loadAnimation(context, R.anim.count_down_anim)
-                Timer().apply {
-                    scheduleAtFixedRate(timerTask {
-                        if (countDownNumber <= 1) {
-                            cancel()
-                            dialog?.dismiss()
-                            dialogDismissListener?.onDismiss()
-                        } else {
-                            countDownTv.apply {
-                                post {
-                                    visibility = View.VISIBLE
-                                    text = countDownNumber.toString()
-                                    startAnimation(countDownAnimation)
-                                }
+                timer.scheduleAtFixedRate(timerTask {
+                    if (countDownNumber <= 1) {
+                        cancel()
+                        dialog?.dismiss()
+                        dialogDismissListener?.onDismiss()
+                    } else {
+                        countDownTv.apply {
+                            post {
+                                visibility = View.VISIBLE
+                                text = countDownNumber.toString()
+                                startAnimation(countDownAnimation)
                             }
-                            countDownNumber--
                         }
-                    }, 0, 1000)
-                }
+                        countDownNumber--
+                    }
+                }, 0, 1000)
             }
-
         }
         handClickAnimation()
     }
@@ -98,6 +96,7 @@ class CountDownDialog : DialogFragment() {
 
     override fun onCancel(dialog: DialogInterface) {
         super.onCancel(dialog)
+        timer.cancel()
         activity?.finish()
     }
 

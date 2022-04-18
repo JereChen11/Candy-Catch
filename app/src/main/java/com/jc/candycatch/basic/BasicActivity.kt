@@ -93,8 +93,10 @@ class BasicActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener
                 override fun onAnimationEnd(p0: Animator?) {
                     viewMap.remove(tv.id)
                     Log.e(TAG, "onAnimationEnd: viewMap.size = ${viewMap.size}")
-                    if (viewMap.isEmpty() && !isShowResultDialog) {
-                        Log.e(TAG, "onAnimationEnd: viewMap.isEmpty", )
+                    if (viewMap.isEmpty() && !isShowResultDialog
+                        && !supportFragmentManager.isDestroyed
+                    ) {
+                        Log.e(TAG, "onAnimationEnd: viewMap.isEmpty")
                         ResultDialog.newInstance(this@BasicActivity, catchNumber++)
                             .show(supportFragmentManager.beginTransaction(), "ResultDialog")
                         isShowResultDialog = true

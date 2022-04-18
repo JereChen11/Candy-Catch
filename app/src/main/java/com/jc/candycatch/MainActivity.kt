@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jc.candycatch.advanced.AdvancedActivity
 import com.jc.candycatch.basic.BasicActivity
 import com.jc.candycatch.databinding.ActivityMainBinding
+import com.jc.candycatch.difficult.DifficultActivity
 
 class MainActivity : AppCompatActivity() {
 //    , CountDownDialog.DialogDismissListener,
@@ -29,6 +30,9 @@ class MainActivity : AppCompatActivity() {
             }
             advancedBtn.setOnClickListener {
                 startActivity(Intent(this@MainActivity, AdvancedActivity::class.java))
+            }
+            difficultBtn.setOnClickListener {
+                startActivity(Intent(this@MainActivity, DifficultActivity::class.java))
             }
         }
 
