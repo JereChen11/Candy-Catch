@@ -1,4 +1,4 @@
-package com.jc.candycatch.advanced
+package com.jc.candycatch
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -9,12 +9,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class AdvancedViewModel : ViewModel() {
-    val TAG = "AdvancedViewModel"
+class PointViewModel : ViewModel() {
+    private val TAG = "PointViewModel"
     private val _pointViewMld = MutableLiveData<Int>()
     val pointViewLd: LiveData<Int> = _pointViewMld
 
-    private val delayTime = 18000L
+    var delayTime = 18000L
 
     fun generatePointViewOnTime() {
         viewModelScope.launch(Dispatchers.IO) {

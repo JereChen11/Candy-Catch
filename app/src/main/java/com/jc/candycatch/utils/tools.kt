@@ -16,6 +16,14 @@ fun getScreenHeight(): Int {
     return Resources.getSystem().displayMetrics.heightPixels
 }
 
+fun generateRandomX(leftRange: Int = 0, rightRange: Int = getScreenWidth()): Int {
+    return (leftRange..rightRange).random()
+}
+
+fun generateRandomY(leftRange: Int = 0, rightRange: Int = getScreenHeight()): Int {
+    return (leftRange..rightRange).random()
+}
+
 fun generateRandomCandy(): Int {
     return when ((0..9).random()) {
         0 -> R.drawable.svg_candy1

@@ -3,55 +3,36 @@ package com.jc.candycatch.advanced
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import com.jc.candycatch.BaseActivity
 import com.jc.candycatch.R
 import com.jc.candycatch.databinding.ActivityAdvancedBinding
-import com.jc.candycatch.utils.doVibratorEffect
-import com.jc.candycatch.utils.generateRandomCandy
-import com.jc.candycatch.utils.getScreenHeight
-import com.jc.candycatch.utils.getScreenWidth
-import com.jc.candycatch.view.CountDownDialog
-import com.jc.candycatch.view.ResultDialog
+import com.jc.candycatch.utils.*
 
-class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
-    ResultDialog.PlayAgainListener {
+class AdvancedActivity : BaseActivity<ActivityAdvancedBinding>() {
 
-    private lateinit var binding: ActivityAdvancedBinding
-    private lateinit var viewModel: AdvancedViewModel
-
-    private val viewMap: MutableMap<Int, TextView> = HashMap()
-    private var catchNumber = 0
-    private var isShowResultDialog = false
-
-    private val TAG = "AdvancedActivity"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityAdvancedBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        viewModel = ViewModelProvider(this)[AdvancedViewModel::class.java]
+    override fun initView() {
+        super.initView()
 
         startRotateIssueTv()
+    }
 
-        showCountDownDialog()
+    override fun initObserve() {
+        super.initObserve()
 
         viewModel.pointViewLd.observe(this, {
             TextView(this).apply {
                 id = it
                 background =
                     ContextCompat.getDrawable(this@AdvancedActivity, generateRandomCandy())
-                binding.root.addView(this)
+                viewBinding.root.addView(this)
 
                 viewMap[id] = this
 
@@ -65,7 +46,7 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
                             view?.visibility = View.GONE
 
                             catchNumber++
-                            binding.catchNumberTv.text =
+                            viewBinding.catchNumberTv.text =
                                 getString(R.string.catch_number, catchNumber)
 
                             view?.id?.let { idKey ->
@@ -82,11 +63,10 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
 
             }
         })
-
     }
 
     private fun startRotateIssueTv() {
-        ObjectAnimator.ofFloat(binding.issueIv, "rotation", 0f, 360f).apply {
+        ObjectAnimator.ofFloat(viewBinding.issueIv, "rotation", 0f, 360f).apply {
             duration = 2000
             repeatMode = ObjectAnimator.RESTART
             repeatCount = ObjectAnimator.INFINITE
@@ -95,14 +75,9 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
         }
     }
 
-
-    private fun generateRandomX(): Int = (0..getScreenWidth()).random()
-
-    private fun generateRandomY(): Int = (0..getScreenHeight()).random()
-
     private fun startMoving(tv: TextView) {
         val transitionPair = calculatePosition(generateRandomX(), generateRandomY())
-        tv.layoutParams = ConstraintLayout.LayoutParams(140, 140).apply {
+        tv.layoutParams = ConstraintLayout.LayoutParams(tvWidth, tvHeight).apply {
             bottomToBottom = ConstraintSet.PARENT_ID
             topToTop = ConstraintSet.PARENT_ID
             startToStart = ConstraintSet.PARENT_ID
@@ -121,13 +96,7 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
 
                 override fun onAnimationEnd(p0: Animator?) {
                     viewMap.remove(tv.id)
-                    if (viewMap.isEmpty() && !isShowResultDialog
-                        && !supportFragmentManager.isDestroyed
-                    ) {
-                        ResultDialog.newInstance(this@AdvancedActivity, catchNumber++)
-                            .show(supportFragmentManager.beginTransaction(), "ResultDialog")
-                        isShowResultDialog = true
-                    }
+                    showResultDialog()
                 }
 
                 override fun onAnimationCancel(p0: Animator?) {
@@ -164,26 +133,6 @@ class AdvancedActivity : AppCompatActivity(), CountDownDialog.DialogDismissListe
                 Pair(x - halfScreenWidth, halfScreenHeight + 140)
             }
         }
-    }
-
-    override fun onDismiss() {
-        viewModel.generatePointViewOnTime()
-    }
-
-    override fun playAgain() {
-        viewMap.clear()
-        catchNumber = 0
-        isShowResultDialog = false
-        viewModel.generatePointViewOnTime()
-    }
-
-    override fun backHomePage() {
-        finish()
-    }
-
-    private fun showCountDownDialog() {
-        CountDownDialog.newInstance(this)
-            .show(supportFragmentManager.beginTransaction(), "CountDownDialog")
     }
 
 }

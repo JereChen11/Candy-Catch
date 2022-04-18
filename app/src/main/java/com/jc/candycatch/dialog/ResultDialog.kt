@@ -1,4 +1,4 @@
-package com.jc.candycatch.view
+package com.jc.candycatch.dialog
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator

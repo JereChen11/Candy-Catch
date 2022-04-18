@@ -3,59 +3,38 @@ package com.jc.candycatch.difficult
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
-import android.os.Bundle
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateInterpolator
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProvider
+import com.jc.candycatch.BaseActivity
 import com.jc.candycatch.R
 import com.jc.candycatch.databinding.ActivityDifficultBinding
-import com.jc.candycatch.utils.doVibratorEffect
-import com.jc.candycatch.utils.generateRandomCandy
-import com.jc.candycatch.utils.getScreenHeight
-import com.jc.candycatch.utils.getScreenWidth
-import com.jc.candycatch.view.CountDownDialog
-import com.jc.candycatch.view.ResultDialog
+import com.jc.candycatch.utils.*
 
-class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissListener,
-    ResultDialog.PlayAgainListener {
+class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
 
-    private lateinit var binding: ActivityDifficultBinding
-    private lateinit var viewModel: DifficultViewModel
-
-    private val viewMap: MutableMap<Int, TextView> = HashMap()
-    private var catchNumber = 0
-    private var isShowResultDialog = false
-
-    private val TAG = "DifficultActivity"
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityDifficultBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initView() {
+        super.initView()
 
         initPitchingIv()
+        viewModel.delayTime = 25000L
+    }
 
-        viewModel = ViewModelProvider(this)[DifficultViewModel::class.java]
-
-
-        Log.e(TAG, "onCreate: Direction.values().random() = ${Direction.values().random()}")
+    override fun initObserve() {
+        super.initObserve()
 
         viewModel.pointViewLd.observe(this, {
             TextView(this).apply {
                 id = it
                 background =
                     ContextCompat.getDrawable(this@DifficultActivity, generateRandomCandy())
-                binding.root.addView(this)
+                viewBinding.root.addView(this)
 
                 viewMap[id] = this
 
@@ -69,7 +48,7 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
                             view?.visibility = View.GONE
 
                             catchNumber++
-                            binding.catchNumberTv.text =
+                            viewBinding.catchNumberTv.text =
                                 getString(R.string.catch_number, catchNumber)
 
                             view?.id?.let { idKey ->
@@ -84,17 +63,7 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
                 })
             }
         })
-
-        showCountDownDialog()
-
     }
-
-    private val tvWidth = 140
-    private val tvHeight = 140
-    private val screenWidth = getScreenWidth()
-    private val screenHeight = getScreenHeight()
-    private val halfScreenWidth = screenWidth / 2
-    private val halfScreenHeight = screenHeight / 2
 
     private fun startMoving(tv: TextView) {
         //step 1：确定Tv的初始位置
@@ -157,13 +126,7 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
 
                 override fun onAnimationEnd(p0: Animator?) {
                     viewMap.remove(tv.id)
-                    if (viewMap.isEmpty() && !isShowResultDialog
-                        && !supportFragmentManager.isDestroyed
-                    ) {
-                        ResultDialog.newInstance(this@DifficultActivity, catchNumber++)
-                            .show(supportFragmentManager.beginTransaction(), "ResultDialog")
-                        isShowResultDialog = true
-                    }
+                    showResultDialog()
                 }
 
                 override fun onAnimationCancel(p0: Animator?) {
@@ -178,14 +141,6 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
             start()
         }
 
-    }
-
-    private fun generateRandomX(leftRange: Int = 0, rightRange: Int = getScreenWidth()): Int {
-        return (leftRange..rightRange).random()
-    }
-
-    private fun generateRandomY(leftRange: Int = 0, rightRange: Int = getScreenHeight()): Int {
-        return (leftRange..rightRange).random()
     }
 
     private fun calculatePosition(x: Int, y: Int): Pair<Int, Int> {
@@ -210,7 +165,7 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
     }
 
     private fun initPitchingIv() {
-        binding.apply {
+        viewBinding.apply {
             startRotateIssueTv(leftTopIv)
             startRotateIssueTv(rightTopIv)
             startRotateIssueTv(leftBottomIv)
@@ -236,24 +191,4 @@ class DifficultActivity : AppCompatActivity(), CountDownDialog.DialogDismissList
         RIGHT_BOTTOM
     }
 
-    override fun onDismiss() {
-        viewModel.generatePointViewOnTime()
-    }
-
-    override fun playAgain() {
-        viewMap.clear()
-        catchNumber = 0
-        isShowResultDialog = false
-
-        viewModel.generatePointViewOnTime()
-    }
-
-    override fun backHomePage() {
-        finish()
-    }
-
-    private fun showCountDownDialog() {
-        CountDownDialog.newInstance(this)
-            .show(supportFragmentManager.beginTransaction(), "CountDownDialog")
-    }
 }

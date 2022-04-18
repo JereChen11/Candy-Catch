@@ -1,4 +1,4 @@
-package com.jc.candycatch.view
+package com.jc.candycatch.dialog
 
 import android.content.DialogInterface
 import android.os.Bundle
