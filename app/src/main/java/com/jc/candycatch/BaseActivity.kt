@@ -1,7 +1,6 @@
 package com.jc.candycatch
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +22,7 @@ open class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
     val viewMap: MutableMap<Int, TextView> = HashMap()
     var catchNumber = 0
     var isShowResultDialog = false
+//    var isAllowSystemBack = true
 
     val tvWidth = 140
     val tvHeight = 140
@@ -49,9 +49,7 @@ open class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
         return type as Class<VB>
     }
 
-    open fun initView() {
-        showCountDownDialog()
-    }
+    open fun initView() {}
 
     open fun initObserve() {}
 
@@ -71,8 +69,8 @@ open class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
         finish()
     }
 
-    private fun showCountDownDialog() {
-        CountDownDialog.newInstance(this)
+    fun showCountDownDialog(levelId: Int) {
+        CountDownDialog.newInstance(getString(levelId), this)
             .show(supportFragmentManager.beginTransaction(), "CountDownDialog")
     }
 
@@ -85,5 +83,11 @@ open class BaseActivity<VB : ViewBinding> : AppCompatActivity(),
             isShowResultDialog = true
         }
     }
+
+//    override fun onBackPressed() {
+//        if (isAllowSystemBack) {
+//            super.onBackPressed()
+//        }
+//    }
 
 }

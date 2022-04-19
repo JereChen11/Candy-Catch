@@ -46,6 +46,8 @@ class CountDownDialog : DialogFragment() {
 
         handClickAnimation()
         binding?.apply {
+            levelTv.text = arguments?.getString(LEVEL_KEY) ?: ""
+
             startTv.setOnClickListener {
                 startContainerCl.visibility = View.GONE
                 val countDownAnimation =
@@ -106,10 +108,16 @@ class CountDownDialog : DialogFragment() {
 
     companion object {
         var dialogDismissListener: DialogDismissListener? = null
+        const val LEVEL_KEY = "LEVEL_KEY"
 
-        fun newInstance(listener: DialogDismissListener): CountDownDialog {
+        fun newInstance(level: String, listener: DialogDismissListener): CountDownDialog {
+
             this.dialogDismissListener = listener
-            return CountDownDialog()
+            return CountDownDialog().apply {
+                arguments = Bundle().apply {
+                    putString(LEVEL_KEY, level)
+                }
+            }
         }
     }
 

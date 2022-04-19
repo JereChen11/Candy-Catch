@@ -19,7 +19,7 @@ import com.jc.candycatch.utils.*
 class AdvancedActivity : BaseActivity<ActivityAdvancedBinding>() {
 
     override fun initView() {
-        super.initView()
+        showCountDownDialog(R.string.level_advanced)
 
         startRotateIssueTv()
     }

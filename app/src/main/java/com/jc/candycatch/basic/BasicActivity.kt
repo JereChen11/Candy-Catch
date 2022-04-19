@@ -21,6 +21,10 @@ class BasicActivity : BaseActivity<ActivityBasicBinding>() {
 
     private val movingDuration = 3000L
 
+    override fun initView() {
+        showCountDownDialog(R.string.level_basic)
+    }
+
     override fun initObserve() {
         viewModel.pointViewLd.observe(this, {
             val leftMargin = (0..(getScreenWidth() - tvWidth)).random()

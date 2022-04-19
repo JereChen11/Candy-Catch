@@ -20,7 +20,7 @@ import com.jc.candycatch.utils.*
 class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
 
     override fun initView() {
-        super.initView()
+        showCountDownDialog(R.string.level_difficult)
 
         initPitchingIv()
         viewModel.delayTime = 25000L

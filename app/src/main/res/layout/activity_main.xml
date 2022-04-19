@@ -4,49 +4,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_candy"
-    android:gravity="center"
+    android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <!--    <TextView-->
-    <!--        android:id="@+id/leftTimeTv"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:layout_marginTop="100dp"-->
-    <!--        android:gravity="center"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        android:textSize="20sp" />-->
-
-    <!--    <TextView-->
-    <!--        android:id="@+id/catchNumberTv"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_gravity="center_horizontal"-->
-    <!--        android:layout_marginTop="135dp"-->
-    <!--        android:gravity="center"-->
-    <!--        android:textColor="@color/white"-->
-    <!--        android:textSize="20sp" />-->
+    <TextView
+        android:id="@+id/titleTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="100dp"
+        android:gravity="center"
+        android:text="@string/count_down_dialog_title"
+        android:textColor="@color/white"
+        android:textSize="25sp" />
 
     <Button
         android:id="@+id/basicBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Basic" />
+        android:text="@string/level_basic" />
 
     <Button
         android:id="@+id/advancedBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Advanced" />
+        android:text="@string/level_advanced" />
 
     <Button
         android:id="@+id/difficultBtn"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Difficult" />
-
+        android:text="@string/level_difficult" />
 
 </LinearLayout>
