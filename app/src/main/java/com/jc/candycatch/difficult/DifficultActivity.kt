@@ -148,8 +148,12 @@ class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
 
     }
 
+    /**
+     * x, y 是指生成的随机坐标点的坐标
+     *
+     * 移动的距离是两个相似三角形相加
+     */
     private fun calculatePosition(x: Int, y: Int): Pair<Int, Int> {
-        //移动的距离是两个相似三角形相加
         return if (x > halfScreenWidth) {
             if (y > halfScreenHeight) {
                 //right_bottom
