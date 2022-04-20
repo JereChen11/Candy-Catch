@@ -91,4 +91,9 @@ class BasicActivity : BaseActivity<ActivityBasicBinding>() {
 
     }
 
+    override fun playAgain() {
+        super.playAgain()
+        viewBinding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
+    }
+
 }

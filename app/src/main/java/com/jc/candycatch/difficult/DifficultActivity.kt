@@ -65,14 +65,19 @@ class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
         })
     }
 
+    override fun playAgain() {
+        super.playAgain()
+        viewBinding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
+    }
+
     private fun startMoving(tv: TextView) {
         //step 1：确定Tv的初始位置
         var transitionPair: Pair<Int, Int> = Pair(0, 0)
         tv.layoutParams = when (Direction.values().random()) {
             Direction.LEFT_TOP -> {
                 transitionPair = calculatePosition(
-                    generateRandomX(screenWidth / 2),
-                    generateRandomY(screenHeight / 2)
+                    generateRandomX(halfScreenWidth),
+                    generateRandomY(halfScreenHeight)
                 )
                 ConstraintLayout.LayoutParams(tvWidth, tvHeight).apply {
                     startToStart = ConstraintSet.PARENT_ID
@@ -81,8 +86,8 @@ class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
             }
             Direction.LEFT_BOTTOM -> {
                 transitionPair = calculatePosition(
-                    generateRandomX(screenWidth / 2),
-                    generateRandomY(0, screenHeight / 2)
+                    generateRandomX(halfScreenWidth),
+                    generateRandomY(0, halfScreenHeight)
                 )
                 ConstraintLayout.LayoutParams(tvWidth, tvHeight).apply {
                     startToStart = ConstraintSet.PARENT_ID
@@ -91,8 +96,8 @@ class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
             }
             Direction.RIGHT_TOP -> {
                 transitionPair = calculatePosition(
-                    generateRandomX(0, screenWidth / 2),
-                    generateRandomY(screenHeight / 2)
+                    generateRandomX(0, halfScreenWidth),
+                    generateRandomY(halfScreenHeight)
                 )
                 ConstraintLayout.LayoutParams(tvWidth, tvHeight).apply {
                     endToEnd = ConstraintSet.PARENT_ID
@@ -101,8 +106,8 @@ class DifficultActivity : BaseActivity<ActivityDifficultBinding>() {
             }
             Direction.RIGHT_BOTTOM -> {
                 transitionPair = calculatePosition(
-                    generateRandomX(0, screenWidth / 2),
-                    generateRandomY(0, screenHeight / 2)
+                    generateRandomX(0, halfScreenWidth),
+                    generateRandomY(0, halfScreenHeight)
                 )
                 ConstraintLayout.LayoutParams(tvWidth, tvHeight).apply {
                     endToEnd = ConstraintSet.PARENT_ID

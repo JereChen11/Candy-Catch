@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">糖果猎手</string>
+    <string name="app_name">糖果捕捉器</string>
     <string name="left_time_double">剩余时间 00:%d</string>
     <string name="left_time_single">剩余时间 00:0%d</string>
     <string name="catch_number">%d 个</string>

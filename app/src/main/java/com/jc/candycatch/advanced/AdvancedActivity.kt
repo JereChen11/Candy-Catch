@@ -15,6 +15,7 @@ import com.jc.candycatch.BaseActivity
 import com.jc.candycatch.R
 import com.jc.candycatch.databinding.ActivityAdvancedBinding
 import com.jc.candycatch.utils.*
+import kotlin.math.absoluteValue
 
 class AdvancedActivity : BaseActivity<ActivityAdvancedBinding>() {
 
@@ -63,6 +64,11 @@ class AdvancedActivity : BaseActivity<ActivityAdvancedBinding>() {
 
             }
         })
+    }
+
+    override fun playAgain() {
+        super.playAgain()
+        viewBinding.catchNumberTv.text = getString(R.string.catch_number, catchNumber)
     }
 
     private fun startRotateIssueTv() {
@@ -114,25 +120,26 @@ class AdvancedActivity : BaseActivity<ActivityAdvancedBinding>() {
     }
 
     private fun calculatePosition(x: Int, y: Int): Pair<Int, Int> {
-        val halfScreenWidth = getScreenWidth() / 2
-        val halfScreenHeight = getScreenHeight() / 2
-        //todo 相似三角形
-        return if (x <= halfScreenWidth) {
-            //x left
-            if (y <= halfScreenHeight) {
-                Pair(x - halfScreenWidth, -halfScreenHeight - 140)
-            } else {
-                //y down
-                Pair(x - halfScreenWidth, halfScreenHeight + 140)
-            }
-        } else {
-            //x right
-            if (y <= halfScreenHeight) {
-                Pair(x - halfScreenWidth, -halfScreenHeight - 140)
-            } else {
-                Pair(x - halfScreenWidth, halfScreenHeight + 140)
-            }
+        return checkTransitionXy(Pair(x - halfScreenWidth, y - halfScreenHeight))
+    }
+
+    /**
+     * 取一个相同大小的三角形的话，还是有可能平移不出屏幕，应该避免这个情况
+     */
+    private fun checkTransitionXy(transitionXyPair: Pair<Int, Int>): Pair<Int, Int> {
+        //递归的终止条件
+        if (transitionXyPair.first.absoluteValue > (halfScreenWidth + tvWidth)
+            || transitionXyPair.second.absoluteValue > (halfScreenHeight + tvHeight)
+        ) {
+            return transitionXyPair
         }
+
+        return checkTransitionXy(
+            Pair(
+                (transitionXyPair.first * 1.1).toInt(),
+                (transitionXyPair.second * 1.1).toInt()
+            )
+        )
     }
 
 }
